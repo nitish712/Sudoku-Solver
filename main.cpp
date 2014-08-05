@@ -13,36 +13,44 @@ int main()
 
 	int level = 1;
 	getchar();
+	int changd = 0;
 	while(1){
 		again:
 			p.display();
 			getchar();
-			if(s_c.perform_op())
+			if(s_c.perform_op()){
+				changd = 1;
 				goto again;
-			level = max(level, 2);
+			}
+			
 			if(s_p.perform_op()){
-				
+				level = max(level, 2);
+				changd =1;
 				goto again;
 			}
-			level = max(level, 3);
+			
 			if(c_l.perform_op()){
-				
+				level = max(level, 3);
+				changd=1;
 				goto again;
 			}
-			level = max(level, 4);
+			
 			if(n_p.perform_op()){
-				
+				level = max(level, 4);
+				changd=1;
 				goto again;
 			}
-			level = max(level, 5);
+			
 			break;
 	}
-	while(1)
+	if(!changd)
+		level = 5;
+	/*while(1)
 	{
 		char g=getchar();
 		if(g!='\n')
 			p.display(g-'0');
-	}
+	}*/
 		//s.perform_op();
 		//p.display();
 	printf("Board Level:%d\n", level);

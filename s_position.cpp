@@ -3,14 +3,13 @@
 #define S_POSITION
 class SinglePosition : public BasicOperations
 {
-	public:
-		SinglePosition(Board *g): BasicOperations(g){}
-
 		int check_uniq_roc(int rc, int rorc=1);
 		int check_uniq_box(int box_num);
 
 		void fill_by_num(int num, int rc, int rorc=1);
 		void fill_by_num_box(int num, int box_num);
+	public:
+		SinglePosition(Board *g): BasicOperations(g){}
 
 		int perform_op();
 
@@ -57,18 +56,16 @@ int SinglePosition::perform_op()
 int SinglePosition::check_uniq_box(int box_num)
 {
 	int s_r = (box_num/3)*3, s_c = (box_num%3)*3;
-	unsigned int ans = 0, r_xor = 0;
+	unsigned int ans, usedOnce = 0, usedTwice = 0;
 	for(int i=s_r; i<s_r+3; ++i)
 	{
 		for(int j=s_c; j<s_c+3; ++j)
 		{
-			unsigned int tmp = ans;
-			ans ^= game->chance_board[i][j];
-			unsigned int tmp2 = ((~tmp) & ans);
-			ans &= ~(tmp2 & r_xor);
-			r_xor |= game->chance_board[i][j];
+			usedTwice |= usedOnce & game->chance_board[i][j];
+			usedOnce |= game->chance_board[i][j];
 		}
 	}
+	ans = usedOnce & (~usedTwice);
 	if(ans)
 	{
 		int val = 0;
@@ -99,15 +96,14 @@ void SinglePosition::fill_by_num_box(int num, int box_num)
 }
 int SinglePosition::check_uniq_roc(int rc, int rorc)
 {
-	unsigned int ans = 0, r_xor = 0;
+	unsigned int ans = 0, r_xor = 0, usedTwice=0, usedOnce=0;
 	for(int i=0; i<9; ++i)
 	{
-		unsigned int tmp = ans;
-		ans ^= (rorc ? game->chance_board[rc][i] : game->chance_board[i][rc]);
-		unsigned int tmp2 = ((~tmp) & ans);
-		ans &= ~(tmp2 & r_xor);
-		r_xor |= (rorc ? game->chance_board[rc][i] : game->chance_board[i][rc]);
+		usedTwice |= usedOnce & (rorc ? game->chance_board[rc][i] : game->chance_board[i][rc]);
+		
+		usedOnce |= (rorc ? game->chance_board[rc][i] : game->chance_board[i][rc]);
 	}
+	ans = usedOnce & (~usedTwice);
 	if(ans)
 	{
 		int val = 0;
