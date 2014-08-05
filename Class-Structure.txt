@@ -1,0 +1,15 @@
+This file shows the organisation of various classes used in the program.
+
+board.cpp:
+This represents the structure of the game. It contains two 2-D arrays:
+board
+chance_board
+board contains the value at a particular place. If none is there, it is marked as 0.
+chance_board contains the possible values for that place. They are represented in a bit wise fashion. 
+
+basic.cpp:
+This contains all the basic operations that are done on the board such as setting and clearing the bits in the chance_board at a position.
+It also uses an object of "board" class. 
+There is also a method perform_op() which should be over-ridden by the derived classes.
+
+Remaining all classes inherit basic.cpp and initialize the board object by calling the base class constructer. Note that the arrays in the board object are kept public for easier access.
